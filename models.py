@@ -2,9 +2,6 @@ import datetime
 
 from app import db
 from sqlalchemy.orm import relationship
-from Users_list import USERS
-from Orders_list import ORDERS
-from Offers_list import OFFERS
 
 
 
@@ -14,8 +11,13 @@ class UserRole(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     role_type = db.Column(db.String(100))
 
-    user_role = relationship('User')
+    users = relationship('User')
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "role_type": self.role_type
+        }
 
 
 class User(db.Model):
@@ -28,7 +30,7 @@ class User(db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('user_roles.id'))
     phone = db.Column(db.String(100))
 
-    role = relationship('UserRole')
+    role = relationship('UserRole', foreign_keys=[role_id])
     # orders = relationship('Order')
 
     def to_dict(self):
@@ -38,7 +40,7 @@ class User(db.Model):
             "last_name": self.last_name,
             "age": self.age,
             "email": self.email,
-            "role": self.role,
+            "role_id": self.role_id,
             "phone": self.phone
         }
 
@@ -55,30 +57,16 @@ class Order(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    customer = relationship('User', foreign_keys=id)
-    executor = relationship('User', foreign_keys=id)
-
-    def start_date_fix(self):
-        """
-        fixing start date
-        """
-        month_start, day_start, year_start = self.split("/")
-        return datetime.date(year=int(year_start), month=int(month_start), day=int(day_start))
-
-    def end_date_fix(self):
-        """
-        fixing end date
-        """
-        month_end, day_end, year_end = self.split("/")
-        return datetime.date(year=int(year_end), month=int(month_end), day=int(day_end))
+    customer = relationship('User', foreign_keys=[customer_id])
+    executor = relationship('User', foreign_keys=[executor_id])
 
     def to_dict(self):
         return {
             "id": self.id,
             "name": self.name,
             "description": self.description,
-            "start_date": self.start_date_fix,
-            "end_date": self.end_date_fix,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
             "address": self.address,
             "price": self.price,
             "customer_id": self.customer_id,
@@ -92,8 +80,8 @@ class Offer(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     executor_id = db.Column(db.Integer, db.ForeignKey('order.executor_id'))
 
-    order = relationship('Order', foreign_keys=order_id)
-    executor = relationship('User', foreign_keys=executor_id)
+    order = relationship('Order', foreign_keys=[order_id])
+    executor = relationship('User', foreign_keys=[executor_id])
 
     def to_dict(self):
         return {
@@ -106,25 +94,3 @@ class Offer(db.Model):
 db.drop_all()
 db.create_all()
 
-for user in USERS:
-    # print(user['role'])
-    db.session.add(UserRole(
-        id=user['id'],
-        role_type=user['role']
-    ))
-    db.session.commit()
-
-# for user in USERS:
-#
-#     print(user.to_dict())
-
-#     db.session.add(user.to_dict())
-#     db.session.commit()
-#
-# for order in ORDERS:
-#     db.session.add(order.to_dict())
-#     db.session.commit()
-#
-# for offer in OFFERS:
-#     db.session.add(offer.to_dict())
-#     db.session.commit()

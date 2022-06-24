@@ -1,5 +1,7 @@
-import datetime
+
 import json
+from datetime import datetime
+
 from app import db
 
 from models import UserRole, User, Order, Offer
@@ -10,24 +12,24 @@ from Offers_list import OFFERS
 from UsersRole_list import USERSROLE
 
 
-def start_date_fix(order):
-    """
-    fixing start date
-    """
-    month_start, day_start, year_start = order['start_date'].split("/")
-    return datetime.date(year=int(year_start), month=int(month_start), day=int(day_start))
-
-
-def end_date_fix(order):
-    """
-    fixing end date
-    """
-    month_end, day_end, year_end = order['end_date'].split("/")
-    return datetime.date(year=int(year_end), month=int(month_end), day=int(day_end))
-
-
-def add_orders_to_db(self):
-    pass
+# def start_date_fix(order):
+#     """
+#     fixing start date
+#     """
+#     month_start, day_start, year_start = order['start_date'].split("/")
+#     return datetime.date(year=int(year_start), month=int(month_start), day=int(day_start))
+#
+#
+# def end_date_fix(order):
+#     """
+#     fixing end date
+#     """
+#     month_end, day_end, year_end = order['end_date'].split("/")
+#     return datetime.date(year=int(year_end), month=int(month_end), day=int(day_end))
+#
+#
+# def add_orders_to_db(self):
+#     pass
 
 #
 # def create_users_role():
@@ -50,7 +52,14 @@ def add_role_id():
 # add_role_id()
 
 
-def upload_user_table(USERS):
+def upload_user_table():
+    for user_r in USERSROLE:
+        db.session.add(UserRole(
+            id=user_r['id'],
+            role_type=user_r['role_type'])
+        )
+        db.session.commit()
+
     for user in USERS:
         db.session.add(User(
             id=user['id'],
@@ -62,3 +71,32 @@ def upload_user_table(USERS):
             phone=user['phone'])
         )
         db.session.commit()
+
+    for order in ORDERS:
+        db.session.add(Order(
+            id=order['id'],
+            name=order['name'],
+            description=order['description'],
+            start_date=datetime.strptime(order['start_date'], '%m/%d/%Y'),
+            end_date=datetime.strptime(order['end_date'], '%m/%d/%Y'),
+            address=order['address'],
+            price=order['price'],
+            customer_id=order['customer_id'],
+            executor_id=order['executor_id']
+        ))
+        db.session.commit()
+
+
+    for offer in OFFERS:
+        db.session.add(Offer(
+            id=offer['id'],
+            order_id=offer['order_id'],
+            executor_id=offer['executor_id']
+        ))
+
+        db.session.commit()
+    db.session.close()
+
+upload_user_table()
+
+#  primaryjoin
