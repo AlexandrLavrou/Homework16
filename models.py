@@ -78,7 +78,7 @@ class Offer(db.Model):
     __tablename__ = 'offer'
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
-    executor_id = db.Column(db.Integer, db.ForeignKey('order.executor_id'))
+    executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     order = relationship('Order', foreign_keys=[order_id])
     executor = relationship('User', foreign_keys=[executor_id])
@@ -91,6 +91,6 @@ class Offer(db.Model):
         }
 
 
-db.drop_all()
-db.create_all()
+    # db.drop_all()
+    # db.create_all()
 
