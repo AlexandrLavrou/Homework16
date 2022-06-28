@@ -74,7 +74,7 @@ def get_user(user_id):
         if user is None:
             return "Пользователь не найден"
 
-        return jsonify(user)
+        return jsonify(user.to_dict())
     if request.method == 'PUT':
         user_data = json.loads(request.data)
         user = db.session.query(User).get(user_id)
