@@ -18,7 +18,7 @@ def get_users():
     if request.method == 'GET':
         user_list = []
         for user in User.query.all():
-            user_list.append(user)
+            user_list.append(user.to_dict())
         return jsonify(user_list)
 
     if request.method == 'POST':
