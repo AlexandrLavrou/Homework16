@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-from models import User, Order, Offer
+from models import *
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///base.db'
@@ -206,4 +206,4 @@ def get_offer(offer_id):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

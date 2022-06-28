@@ -1,8 +1,6 @@
-import datetime
-
-from app import db
 from sqlalchemy.orm import relationship
 
+from app import db
 
 
 class UserRole(db.Model):
@@ -90,7 +88,7 @@ class Offer(db.Model):
             "executor_id": self.executor_id
         }
 
-
-    # db.drop_all()
-    # db.create_all()
+#
+# db.drop_all()
+# db.create_all()
 

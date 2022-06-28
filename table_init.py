@@ -1,10 +1,8 @@
-
+# import json
 import json
 from datetime import datetime
 
-from app import db
-
-from models import UserRole, User, Order, Offer
+from models import *
 
 from Orders_list import ORDERS
 from Users_list import USERS
@@ -12,41 +10,13 @@ from Offers_list import OFFERS
 from UsersRole_list import USERSROLE
 
 
-# def start_date_fix(order):
-#     """
-#     fixing start date
-#     """
-#     month_start, day_start, year_start = order['start_date'].split("/")
-#     return datetime.date(year=int(year_start), month=int(month_start), day=int(day_start))
-#
-#
-# def end_date_fix(order):
-#     """
-#     fixing end date
-#     """
-#     month_end, day_end, year_end = order['end_date'].split("/")
-#     return datetime.date(year=int(year_end), month=int(month_end), day=int(day_end))
-#
-#
-# def add_orders_to_db(self):
-#     pass
-
-#
-# def create_users_role():
-#     user_role_list = []
+# def add_role_id():
+#     USERS_with_id=[]
 #     for user in USERS:
-#         user_role_list.append({'id': user['id'], 'role_type': user['role']})
-#
-#     with open('UsersRole_list.py', 'w') as outfile:
-#         json.dump(UserRole, outfile)
-
-def add_role_id():
-    USERS_with_id=[]
-    for user in USERS:
-        user['role_id'] = user['id']
-        USERS_with_id.append(user)
-    with open('Users_list.py', 'w') as outfile:
-        json.dump(USERS_with_id, outfile, indent=4)
+#         user['role_id'] = user['id']
+#         USERS_with_id.append(user)
+#     with open('Users_list.py', 'w') as outfile:
+#         json.dump(USERS_with_id, outfile, indent=4)
 
 #
 # add_role_id()
@@ -86,7 +56,6 @@ def upload_user_table():
         ))
         db.session.commit()
 
-
     for offer in OFFERS:
         db.session.add(Offer(
             id=offer['id'],
@@ -97,6 +66,43 @@ def upload_user_table():
         db.session.commit()
     db.session.close()
 
+
 upload_user_table()
 
 #  primaryjoin
+
+
+# def start_date_fix(order):
+#     """
+#     fixing start date
+#     """
+#     month_start, day_start, year_start = order['start_date'].split("/")
+#     return datetime.date(year=int(year_start), month=int(month_start), day=int(day_start))
+#
+#
+# def end_date_fix(order):
+#     """
+#     fixing end date
+#     """
+#     month_end, day_end, year_end = order['end_date'].split("/")
+#     return datetime.date(year=int(year_end), month=int(month_end), day=int(day_end))
+#
+#
+# def add_orders_to_db(self):
+#     pass
+
+#
+# def create_users_role():
+#     user_role_list = []
+#     for user in USERS:
+#         user_role_list.append({'id': user['id'], 'role_type': user['role']})
+#
+#     with open('UsersRole_list.py', 'w') as outfile:
+#         json.dump(UserRole, outfile)
+
+with open('USERS', 'r') as f:
+    restart = json.load(f)
+
+with open('USERS', 'w') as f1:
+    f1.write(json.dumps(restart))
+# with open('USERS', 'w')

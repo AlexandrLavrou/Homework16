@@ -1,4 +1,4 @@
-USERS = [
+USERS =[
     {
         "id": 1,
         "first_name": "Hudson",
