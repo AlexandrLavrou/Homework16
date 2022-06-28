@@ -100,9 +100,3 @@ upload_user_table()
 #     with open('UsersRole_list.py', 'w') as outfile:
 #         json.dump(UserRole, outfile)
 
-with open('USERS', 'r') as f:
-    restart = json.load(f)
-
-with open('USERS', 'w') as f1:
-    f1.write(json.dumps(restart))
-# with open('USERS', 'w')
